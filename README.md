@@ -1,1 +1,63 @@
 # Networking
+
+
+
+How to set up IP Address on a VM in Linux
+
+Setting up an IP address on a virtual machine (VM) in Linux involves a few simple steps. I'll provide a general guide that should work for most Linux distributions. 
+Keep in mind that the exact steps may vary slightly depending on the distribution and the network configuration you are using.
+Open a terminal: Access your Linux VM either through a graphical interface or a remote connection using SSH.
+Check network interfaces: Use the following command to list the available network interfaces on your VM:
+
+  $ ifconfig -a
+  $ ip addr show
+
+The primary network interface is often named "eth0" or "ensXX" (where XX is a number).
+Edit network configuration file: You will need root privileges to modify the network configuration. Use a text editor (such as nano or vi) to edit the network configuration file. 
+The file location and name may differ depending on your Linux distribution:
+
+For systems that use ifconfig:
+  $ sudo nano /etc/network/interfaces
+
+For systems that use ip (such as recent versions of Ubuntu and CentOS):
+  $ sudo nano /etc/sysconfig/network-scripts/ifcfg-eth0
+
+Configure the IP address: Inside the network configuration file, locate the line related to the interface you want to configure (e.g., eth0). 
+Modify the file to set a static IP address. 
+The syntax may vary slightly between different Linux distributions.
+
+For ifconfig, set a static IP address:
+ $ iface eth0 inet static
+
+  address YOUR_IP_ADDRESS
+  netmask YOUR_NETMASK
+  gateway YOUR_GATEWAY
+
+For ip, set a static IP address:
+
+makefile
+TYPE=Ethernet
+BOOTPROTO=none
+IPADDR=YOUR_IP_ADDRESS
+NETMASK=YOUR_NETMASK
+GATEWAY=YOUR_GATEWAY
+ONBOOT=yes
+
+Replace YOUR_IP_ADDRESS, YOUR_NETMASK, and YOUR_GATEWAY with the appropriate values for your network. Save the changes and exit the text editor.
+Restart the network service: After making changes to the network configuration, restart the network service for the changes to take effect. 
+The command may vary depending on your Linux distribution.
+
+For systems that use ifconfig:
+  $ sudo /etc/init.d/networking restart
+
+For systems that use ip (such as recent versions of Ubuntu and CentOS):
+  $ sudo systemctl restart network
+
+Verify the IP address: Use the following command to check if the IP address is set correctly:
+  $ ifconfig
+  $ ip addr show
+
+You should now see the configured IP address associated with the network interface you modified.
+
+Please note that if you're using a VM provider or virtualization software, there might be additional settings to configure within the VM management interface to ensure 
+network connectivity to the outside world (e.g., NAT, bridged networking, etc.).
